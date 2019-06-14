@@ -3,17 +3,46 @@
     <head>
         <meta charset="UTF-8">
         <title>Chat</title>
+        <style>
+            html, body {
+                min-height: 100vh;
+            }
+
+            #chat {
+                min-height: 95vh;
+            }
+            .chat-content {
+                height: 85vh;
+            }
+
+            .chat-box {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 1px solid rgba(0,0,0,.125);
+                border-radius: .25rem;
+            }
+        </style>
     </head>
-    <body>
-        <div id="chat">
-            <ul id="message">
-                <li v-for="message in messages">{{ message }}</li>	
-            </ul>
-            
-            <form v-on:submit="send">
-                <input type="text" v-model="message">
-                <button>Send</button>
-            </form>	
+    <body class="has-background-light">
+        <div id="chat" class="container column is-centered hero is-vcentered box content">
+            <div class="chat-content column is-12 ">
+                <div class="column is-12">
+                    <ul id="message" class="">
+                        <li v-for="message in messages">{{ message }}</li>	
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-box column">
+                    <form v-on:submit="send">
+                        <input type="text" v-model="message">
+                        <button>Send</button>
+                    </form>	
+            </div>
         </div>
           
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
@@ -22,7 +51,7 @@
             var socket = io();
             Vue.config.devtools = true;
 
-            let app = new Vue({
+            new Vue({
                 el:'#chat',
                 data: {
                     messages: [],
@@ -30,8 +59,8 @@
                 },
                 mounted: function() {
                     socket.on('chat.message', function(message) {
-                        app.messages.push(message);
-                    });
+                        this.messages.push(message);
+                    }.bind(this));
                 },
                 methods: {
                     send: function(e) {
@@ -42,5 +71,6 @@
                 }
             });
             </script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
     </body>
 </html>
